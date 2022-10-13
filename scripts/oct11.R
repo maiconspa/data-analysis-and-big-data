@@ -5,7 +5,7 @@ source("../utils/getpercentile.r")
 setwd("../output/oct11/")
 
 dataset <- read.table(
-  "corn_harvest.csv",
+  "../data/corn_harvest.csv",
   sep = ",",
   header = TRUE,
   quote = "\"'",
