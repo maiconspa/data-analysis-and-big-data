@@ -1,11 +1,8 @@
-source("../utils/getmode.r")
-source("../utils/getpercentile.r")
-
 # Data preparation
-setwd("../output/oct11/")
+# setwd(paste(getwd(), "/output/oct11/", sep = ""))
 
 dataset <- read.table(
-  "../data/corn_harvest.csv",
+  paste(getwd(), "/data/corn_harvest.csv", sep = ""),
   sep = ",",
   header = TRUE,
   quote = "\"'",
@@ -14,6 +11,11 @@ dataset <- read.table(
 
 years <- unique(dataset$AnoSafra)
 
+
+getmode <- function(column) {
+  uniqv <- unique(column)
+  uniqv[which.max(tabulate(match(column, uniqv)))]
+}
 
 # a) Para cada ano, calcular : Média, Mediana, Percentil, Moda.
 #    Gravar arquivo chamado item-I-a.csv com os valores obtidos,
@@ -25,7 +27,10 @@ for (i in 1:length(years)) {
 
   mean <- round(mean(df_temp$PrecosMilho), 2)
   median <- round(median(df_temp$PrecosMilho), 2)
-  percent <- round(getpercentile(df_temp$PrecosMilho, c(.25, .75)), 2)
+  percent <- round(
+    data.frame(quantile(df_temp$PrecosMilho, probs=c(.25,.75))),
+    2
+  )
   mode <- getmode(df_temp$PrecosMilho)
 
   harvest_analysis <- c(
@@ -62,3 +67,6 @@ df_final_c <- data.frame()
 #    chamado item-I-d.csv com os valores ordenados, separados por vírgula,
 #    com cabeçalho e com ponto decimal.
 df_final_d <- data.frame()
+
+
+# Utils
